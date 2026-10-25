@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Denshō | Master Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@400;700&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Highly Transparent Sakura Street Background */
+        .bg-sakura-overlay {
+            position: fixed;
+            inset: 0;
+            background-image: url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            filter: sepia(30%) contrast(1.1); 
+            opacity: 0.12; /* Kept very low (transparent) so the text remains completely readable */
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .tech-card-container { perspective: 1200px; }
+
+        /* Reference Image Inspired Card Layout */
+        .art-card {
+            position: relative;
+            height: 460px;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.25s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* 3D Hover & Elevation */
+        .art-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(230, 57, 70, 0.25);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        /* Full Card Imagery */
+        .card-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .art-card:hover .card-bg {
+            transform: scale(1.08);
+        }
+
+        /* Gradient Overlay for Crisp Text Readability */
+        .card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5, 5, 8, 0.95) 0%, rgba(5, 5, 8, 0.4) 50%, rgba(5, 5, 8, 0.1) 100%);
+            z-index: 2;
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Image Sources for Japanese Art Forms */
+        .bg-shodo { background-image: url('https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=1000&auto=format&fit=crop'); }
+        .bg-kintsugi { background-image: url('https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=1000&auto=format&fit=crop'); }
+        .bg-kabuki { background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1000&auto=format&fit=crop'); }
+        .bg-chado { background-image: url('https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=1000&auto=format&fit=crop'); }
+
+        /* Glassmorphic Action Button inside Card */
+        .card-btn {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transition: all 0.25s ease;
+        }
+        .art-card:hover .card-btn {
+            background: rgba(230, 57, 70, 0.85);
+            border-color: rgba(230, 57, 70, 1);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(230, 57, 70, 0.4);
+        }
+
+        /* Modal Custom Animations */
+        #craftModal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #craftModal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-sumi text-gray-200 font-sans antialiased overflow-x-hidden pt-24 min-h-screen flex flex-col justify-between relative">
+
+    <!-- Transparent Background Layer -->
+    <div class="bg-sakura-overlay"></div>
+
+    <!-- Global Navigation -->
+    <nav class="fixed top-0 w-full z-50 bg-[#0A0A0C]/80 backdrop-blur-lg border-b border-white/5 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <a href="index.html" class="flex items-center gap-3 group">
+                <span class="text-[#E63946] font-serif text-2xl group-hover:animate-pulse">伝承</span> 
+                <span class="font-bold tracking-[0.2em] text-white text-sm">DENSHŌ</span>
+            </a>
+            
+            <!-- Desktop Links -->
+            <ul class="hidden md:flex items-center gap-10 text-xs font-medium tracking-[0.15em] uppercase text-gray-400">
+                <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+                <li><a href="about.html" class="hover:text-[#D4AF37] transition-colors">Tech & Vision</a></li>
+                <li><a href="archive.html" class="text-white border-b-2 border-[#D4AF37] pb-1">Archive</a></li>
+                <li>
+                    <a href="dojo.html" class="bg-[#E63946]/10 text-[#E63946] border border-[#E63946]/30 px-6 py-2.5 rounded-full hover:bg-[#E63946]/20 hover:border-[#E63946]/60 transition-all text-white">
+                        Enter Dojo
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Mobile Hamburger -->
+            <button class="md:hidden flex flex-col gap-[5px] focus:outline-none hover:opacity-80 transition-opacity">
+                <span class="w-6 h-[2px] bg-white block"></span>
+                <span class="w-6 h-[2px] bg-white block"></span>
+                <span class="w-6 h-[2px] bg-white block"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-8 relative z-10">
+        <!-- Page Header -->
+        <div class="text-center mb-12">
+            <div class="flex items-center justify-center gap-4 mb-3">
+                <div class="h-[1px] w-12 bg-gold/40"></div>
+                <span class="text-gold tracking-[0.3em] text-xs uppercase font-mono">Master Repository</span>
+                <div class="h-[1px] w-12 bg-gold/40"></div>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-white uppercase">
+                The <span class="glow-title font-serif">伝承記録</span> Archive
+            </h1>
+            <p class="text-gray-400 mt-3 max-w-xl mx-auto text-sm leading-relaxed font-light">
+                Explore traditional Japanese art blueprints. Select any craft to view biomechanical execution steps or load its motion matrix into the Dojo.
+            </p>
+        </div>
+
+        <!-- Master Crafts Visual Grid -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16 tech-card-container">
+            
+            <!-- Card 1: Shodō -->
+            <div class="art-card" onclick="openModal('shodo')">
+                <div class="card-bg bg-shodo"></div>
+                <div class="card-overlay"></div>
+                
+                <div class="absolute top-4 left-4 z-10 flex gap-2">
+                    <span class="font-mono text-[10px] px-2.5 py-1 rounded-full bg-black/60 text-torii border border-torii/40 backdrop-blur-md uppercase tracking-wider">650 Frames</span>
+                </div>
+
+                <div class="card-content">
+                    <div class="text-torii font-serif text-2xl mb-1">書道</div>
+                    <h3 class="text-2xl font-bold text-white tracking-wide font-serif">Shodō</h3>
+                    <p class="text-[11px] text-gray-300 mt-1 mb-4 font-mono uppercase tracking-wider">Japanese Calligraphy</p>
+                    
+                    <div class="card-btn w-full py-2.5 px-4 rounded-xl flex items-center justify-between text-xs font-mono text-gray-200">
+                        <span>Explore Blueprint</span>
+                        <span>&rarr;</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Kintsugi -->
+            <div class="art-card" onclick="openModal('kintsugi')">
+                <div class="card-bg bg-kintsugi"></div>
+                <div class="card-overlay"></div>
+                
+                <div class="absolute top-4 left-4 z-10 flex gap-2">
+                    <span class="font-mono text-[10px] px-2.5 py-1 rounded-full bg-black/60 text-gold border border-gold/40 backdrop-blur-md uppercase tracking-wider">980 Frames</span>
+                </div>
+
+                <div class="card-content">
+                    <div class="text-gold font-serif text-2xl mb-1">金継ぎ</div>
+                    <h3 class="text-2xl font-bold text-white tracking-wide font-serif">Kintsugi</h3>
+                    <p class="text-[11px] text-gray-300 mt-1 mb-4 font-mono uppercase tracking-wider">Golden Joinery</p>
+                    
+                    <div class="card-btn w-full py-2.5 px-4 rounded-xl flex items-center justify-between text-xs font-mono text-gray-200">
+                        <span>Explore Blueprint</span>
+                        <span>&rarr;</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Kabuki -->
+            <div class="art-card" onclick="openModal('kabuki')">
+                <div class="card-bg bg-kabuki"></div>
+                <div class="card-overlay"></div>
+                
+                <div class="absolute top-4 left-4 z-10 flex gap-2">
+                    <span class="font-mono text-[10px] px-2.5 py-1 rounded-full bg-black/60 text-blue-400 border border-blue-500/40 backdrop-blur-md uppercase tracking-wider">1,120 Frames</span>
+                </div>
+
+                <div class="card-content">
+                    <div class="text-blue-400 font-serif text-2xl mb-1">歌舞伎</div>
+                    <h3 class="text-2xl font-bold text-white tracking-wide font-serif">Kabuki</h3>
+                    <p class="text-[11px] text-gray-300 mt-1 mb-4 font-mono uppercase tracking-wider">Theater Performance</p>
+                    
+                    <div class="card-btn w-full py-2.5 px-4 rounded-xl flex items-center justify-between text-xs font-mono text-gray-200">
+                        <span>Explore Blueprint</span>
+                        <span>&rarr;</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Chadō -->
+            <div class="art-card" onclick="openModal('chado')">
+                <div class="card-bg bg-chado"></div>
+                <div class="card-overlay"></div>
+                
+                <div class="absolute top-4 left-4 z-10 flex gap-2">
+                    <span class="font-mono text-[10px] px-2.5 py-1 rounded-full bg-black/60 text-jade border border-jade/40 backdrop-blur-md uppercase tracking-wider">840 Frames</span>
+                </div>
+
+                <div class="card-content">
+                    <div class="text-jade font-serif text-2xl mb-1">茶道</div>
+                    <h3 class="text-2xl font-bold text-white tracking-wide font-serif">Chadō</h3>
+                    <p class="text-[11px] text-gray-300 mt-1 mb-4 font-mono uppercase tracking-wider">Tea Ceremony</p>
+                    
+                    <div class="card-btn w-full py-2.5 px-4 rounded-xl flex items-center justify-between text-xs font-mono text-gray-200">
+                        <span>Explore Blueprint</span>
+                        <span>&rarr;</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="craftModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-lg hidden flex items-center justify-center p-4">
+        <div class="bg-ink border border-white/10 max-w-2xl w-full rounded-3xl overflow-hidden relative shadow-2xl max-h-[90vh] flex flex-col">
+            
+            <!-- Close Button -->
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-30 bg-black/60 text-gray-300 hover:text-white w-9 h-9 rounded-full flex items-center justify-center border border-white/10 backdrop-blur-md text-lg font-mono transition-all hover:scale-110">
+                &times;
+            </button>
+
+            <!-- Scrollable Modal Content Container -->
+            <div id="modalContent" class="overflow-y-auto flex-1"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-black py-6 text-center border-t border-white/5 mt-auto relative z-10">
+        <p class="text-gray-600 text-[11px] tracking-[0.2em] uppercase font-mono">© 2026 Project Denshō Master Archive.</p>
+    </footer>
+
+    <!-- Modal Data & Interaction Logic -->
+    <script>
+        const craftData = {
+            shodo: {
+                title: "Shodō (Japanese Calligraphy)",
+                kanji: "書道",
+                frames: "650 Frames",
+                fps: "60 FPS",
+                difficulty: "Intermediate",
+                img: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=1000&auto=format&fit=crop",
+                themeColor: "text-torii",
+                badgeBg: "bg-torii/10 text-torii border-torii/30",
+                btnStyle: "bg-torii/20 hover:bg-torii/40 border-torii/50 text-torii shadow-[0_0_20px_rgba(230,57,70,0.3)]",
+                desc: "Shodō is the traditional art of Japanese artistic writing using sumi ink and bamboo brushes. It demands absolute posture control, breath synchronization, and uncorrectable single-stroke execution.",
+                steps: [
+                    { title: "Grinding the Ink (Sumi-suri)", text: "Place drops of water on the suzuri stone. Rub the solid sumi ink stick in circular motions until a rich, black viscous sheen is formed." },
+                    { title: "Posture & Grip (Tankō-hō)", text: "Sit upright with elbow floating off the table. Hold brush vertically using the double-hook pinch method for fluid spatial movement." },
+                    { title: "3-Phase Execution (Sanzu-hō)", text: "Execute <i>Ton</i> (45° tip entry), <i>Shu</i> (steady trajectory), and <i>Kettsu</i> (slight terminal pressure and vertical lift)." }
+                ]
+            },
+            kintsugi: {
+                title: "Kintsugi (Golden Joinery)",
+                kanji: "金継ぎ",
+                frames: "980 Frames",
+                fps: "60 FPS",
+                difficulty: "Master",
+                img: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=1000&auto=format&fit=crop",
+                themeColor: "text-gold",
+                badgeBg: "bg-gold/10 text-gold border-gold/30",
+                btnStyle: "bg-gold/20 hover:bg-gold/40 border-gold/50 text-gold shadow-[0_0_20px_rgba(212,175,55,0.3)]",
+                desc: "Kintsugi is the art of repairing broken ceramic vessels using natural urushi lacquer layers dusted with pure gold powder, honoring the history of broken objects.",
+                steps: [
+                    { title: "Edge Priming", text: "Thoroughly clean broken fragments, lightly abrade edges, and seal porous ceramic surfaces with diluted ki-urushi lacquer." },
+                    { title: "Mugi-Urushi Structural Bonding", text: "Mix raw lacquer and flour into a sticky adhesive paste, join pieces with micro-precision, and cure in a humid cabinet for 2-4 weeks." },
+                    { title: "Gold Application (Maki-e)", text: "Smooth seams with sabi-urushi putty, paint red e-urushi accent lines, and sprinkle pure gold dust using a bamboo funtsutsu tube." }
+                ]
+            },
+            kabuki: {
+                title: "Kabuki Theater & Kumadori Makeup",
+                kanji: "歌舞伎",
+                frames: "1,120 Frames",
+                fps: "60 FPS",
+                difficulty: "Expert",
+                img: "https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=1000&auto=format&fit=crop",
+                themeColor: "text-blue-400",
+                badgeBg: "bg-blue-500/10 text-blue-400 border-blue-500/30",
+                btnStyle: "bg-blue-500/20 hover:bg-blue-500/40 border-blue-500/50 text-blue-400 shadow-[0_0_20px_rgba(96,165,250,0.3)]",
+                desc: "Kabuki features highly stylized dramatic staging, physical poses, and symbolic facial muscle makeup (kumadori) that expresses inner character nature.",
+                steps: [
+                    { title: "Oshiroi Base Layer", text: "Coat face, neck, and hands with abura oil base, smoothing a pure white paste across the skin to create a flat mask canvas." },
+                    { title: "Kumadori Muscle Accentuation", text: "Paint bold facial lines—Red (Aragoto) for virtue/heroic power, Blue for villains/spirits, and Brown for supernatural beings." },
+                    { title: "Executing the Mie Pose", text: "Rotate head circularly, stamp foot forcefully on stage (roppo), freeze into an exaggerated posture, and cross eyes to fixate focus." }
+                ]
+            },
+            chado: {
+                title: "Chadō Tea Ceremony Kinematics",
+                kanji: "茶道",
+                frames: "840 Frames",
+                fps: "60 FPS",
+                difficulty: "Advanced",
+                img: "https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=1000&auto=format&fit=crop",
+                themeColor: "text-jade",
+                badgeBg: "bg-jade/10 text-jade border-jade/30",
+                btnStyle: "bg-jade/20 hover:bg-jade/40 border-jade/50 text-jade shadow-[0_0_20px_rgba(42,157,143,0.3)]",
+                desc: "Chadō relies on precise hand biomechanics to manipulate the chasen (bamboo whisk) and hishaku (bamboo water ladle) using wrist-isolated forearm movement.",
+                steps: [
+                    { title: "Chasen Whisking Motion", text: "Grasp top handle with tripod pinch. Keep wrist completely stationary and generate high-frequency M-shaped strokes from the forearm." },
+                    { title: "Hishaku Ladle Pour", text: "Grasp bamboo handle in a loose fist. Pour hot water by slowly extending pinky and ring fingers outward to tip ladle at a steady 45° vector." }
+                ]
+            }
+        };
+
+        function openModal(craftKey) {
+            const data = craftData[craftKey];
+            const content = document.getElementById('modalContent');
+            content.innerHTML = `
+                <!-- Image Banner Header -->
+                <div class="relative h-56 w-full overflow-hidden">
+                    <img src="${data.img}" class="w-full h-full object-cover" alt="${data.title}" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-transparent"></div>
+                    
+                    <div class="absolute bottom-4 left-6 right-6 flex justify-between items-end">
+                        <div>
+                            <span class="font-serif text-3xl ${data.themeColor} block mb-1">${data.kanji}</span>
+                            <h2 class="text-2xl font-bold text-white font-serif tracking-wide">${data.title}</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telemetry Badges & Content Section -->
+                <div class="p-6">
+                    <!-- Badges Bar -->
+                    <div class="flex items-center gap-3 mb-6 font-mono text-xs">
+                        <span class="px-3 py-1 rounded-full border ${data.badgeBg}">${data.difficulty}</span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300">${data.frames}</span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-gray-300">${data.fps}</span>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-gray-300 leading-relaxed mb-6 font-light">
+                        ${data.desc}
+                    </p>
+
+                    <!-- Execution Steps -->
+                    <h3 class="text-sm font-mono uppercase tracking-widest text-gray-400 mb-6 border-b border-white/10 pb-3">
+                        Technical Execution Steps
+                    </h3>
+                    <div class="space-y-4 mb-8">
+                        ${data.steps.map((step, idx) => `
+                            <div class="bg-black/60 border border-white/10 rounded-2xl p-6 flex gap-4">
+                                <span class="font-mono text-sm ${data.themeColor} font-bold mt-0.5">${idx + 1}.</span>
+                                <div>
+                                    <h4 class="text-sm font-bold text-white mb-2 font-mono tracking-wide">${step.title}</h4>
+                                    <p class="text-sm text-gray-400 font-light leading-relaxed">${step.text}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- Load Blueprint Action Button -->
+                    <a href="dojo.html" class="w-full block text-center py-3.5 rounded-xl border ${data.btnStyle} font-mono text-xs uppercase tracking-widest transition-all">
+                        Load Blueprint Into Dojo &rarr;
+                    </a>
+                </div>
+            `;
+            document.getElementById('craftModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('craftModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

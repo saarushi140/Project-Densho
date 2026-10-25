@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Denshō | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Noto+Serif+JP:wght@300;400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .hero-bg {
+            background-image: linear-gradient(to right, rgba(15, 15, 20, 0.95) 0%, rgba(15, 15, 20, 0.6) 45%, rgba(15, 15, 20, 0.1) 100%), url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .nav-link { 
+            position: relative; 
+            transition: color 0.3s ease; 
+        }
+        .nav-link:hover { color: #ffffff; }
+        .nav-link.active { color: #ffffff; font-weight: 500; }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px; left: 0;
+            width: 100%; height: 1px;
+            background-color: #ffffff;
+        }
+
+        .search-bar { 
+            background: transparent; 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            border-radius: 9999px; 
+            padding: 6px 16px; 
+            color: white; 
+            outline: none; 
+            width: 200px;
+        }
+        .search-bar::placeholder { color: rgba(255, 255, 255, 0.5); }
+
+        .carousel-item {
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .carousel-item-small { 
+            width: 85px; 
+            height: 85px; 
+            opacity: 0.6; 
+            filter: grayscale(30%);
+        }
+        .carousel-item-small:hover { 
+            opacity: 1; 
+            transform: scale(1.05); 
+            filter: grayscale(0%);
+        }
+        
+        .carousel-item-active-wrapper {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+        }
+        .carousel-item-active {
+            width: 100%; 
+            height: 100%;
+            border-radius: 50%;
+            background-size: cover;
+            background-position: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        }
+        
+        .btn-explore {
+            background: linear-gradient(90deg, #E63946 0%, #ff5e6b 100%);
+            box-shadow: 0 4px 20px rgba(230, 57, 70, 0.4);
+        }
+
+        #mobileMenu {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #mobileMenu.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="bg-ink text-gray-200 font-sans antialiased overflow-x-hidden">
+
+    <!-- Hero Section -->
+    <div class="hero-bg min-h-screen relative flex flex-col justify-between overflow-hidden">
+        
+        <!-- Top Navigation Bar -->
+        <nav class="w-full z-50 px-6 py-8">
+            <div class="max-w-screen-2xl mx-auto flex justify-between items-center">
+                
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <div class="relative w-8 h-8 flex items-center justify-center">
+                        <svg class="absolute text-[#E63946] w-full h-full" viewBox="0 0 100 100" fill="currentColor">
+                            <path d="M50 10 C 60 10, 65 30, 50 45 C 35 30, 40 10, 50 10 Z" transform="rotate(0 50 50)"/>
+                            <path d="M50 10 C 60 10, 65 30, 50 45 C 35 30, 40 10, 50 10 Z" transform="rotate(72 50 50)"/>
+                            <path d="M50 10 C 60 10, 65 30, 50 45 C 35 30, 40 10, 50 10 Z" transform="rotate(144 50 50)"/>
+                            <path d="M50 10 C 60 10, 65 30, 50 45 C 35 30, 40 10, 50 10 Z" transform="rotate(216 50 50)"/>
+                            <path d="M50 10 C 60 10, 65 30, 50 45 C 35 30, 40 10, 50 10 Z" transform="rotate(288 50 50)"/>
+                        </svg>
+                        <div class="w-3 h-3 bg-black rounded-full absolute bottom-1 right-1 border-2 border-transparent"></div>
+                    </div>
+                </a>
+                
+                <!-- Middle Navigation Links -->
+                <ul class="hidden lg:flex items-center gap-12 text-xs tracking-[0.2em] uppercase text-gray-300">
+                    <li><a href="index.html" class="nav-link active">Home</a></li>
+                    <li><a href="about.html" class="nav-link">Tech & Vision</a></li>
+                    <li><a href="archive.html" class="nav-link">Archive</a></li>
+                    <li><a href="dojo.html" class="nav-link text-[#E63946] hover:text-[#ff5e6b]">Enter Dojo</a></li>
+                </ul>
+
+                <!-- Right Elements: Search & Hamburger -->
+                <div class="flex items-center gap-8">
+                    <div class="relative hidden md:block">
+                        <input type="text" id="searchInput" placeholder="SEARCH..." class="search-bar text-[10px] font-mono tracking-widest transition-all focus:border-white focus:bg-white/10">
+                        <button onclick="performSearch()" class="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </div>
+                    
+                    <button onclick="toggleMobileMenu()" class="flex flex-col gap-[5px] focus:outline-none hover:opacity-80 transition-opacity z-50 cursor-pointer">
+                        <span class="w-7 h-[2px] bg-white block"></span>
+                        <span class="w-7 h-[2px] bg-white block"></span>
+                        <span class="w-7 h-[2px] bg-white block"></span>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Hero Content -->
+        <main class="flex-1 flex flex-col justify-center px-8 lg:px-24 z-10 max-w-screen-2xl mx-auto w-full pt-10">
+            <div class="max-w-xl">
+                <h2 class="text-3xl font-serif text-white/90 mb-1 tracking-widest">匠の技</h2>
+                <h1 class="text-7xl lg:text-[7.5rem] font-bold tracking-tighter uppercase mb-5 leading-none glow-title" style="font-family: 'Space Grotesk', sans-serif;">
+                    DENSHŌ
+                </h1>
+                
+                <div class="flex h-1.5 w-[280px] mb-10 rounded-full overflow-hidden">
+                    <div class="bg-[#E63946] w-[60%]"></div>
+                    <div class="bg-[#1e293b] w-[40%]"></div>
+                </div>
+
+                <div class="relative pl-6 mb-10">
+                    <span class="absolute left-0 top-0 text-3xl text-gray-500 font-serif leading-none">"</span>
+                    <p class="text-base text-gray-300 leading-relaxed font-light mt-1 pr-4">
+                        Tacit knowledge dies with the master. Project Denshō uses advanced hand-tracking AI to capture, analyze, and teach physical movements in 3D space, preserving the soul of craftsmanship.
+                    </p>
+                </div>
+
+                <!-- Action Button -->
+                <a href="dojo.html" class="inline-block btn-explore text-white px-10 py-3 rounded-full text-xs tracking-[0.2em] font-medium uppercase transition-all hover:scale-105 hover:shadow-[0_4px_25px_rgba(230,57,70,0.6)]">
+                    Explore Dojo
+                </a>
+            </div>
+        </main>
+
+        <!-- Bottom Circular Carousel -->
+        <div class="w-full pb-8 px-8 z-10 mt-12">
+            <div class="max-w-screen-2xl mx-auto flex items-center justify-center gap-4 md:gap-8">
+                <button class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#bd455b] flex items-center justify-center text-white hover:bg-[#E63946] transition-colors shadow-lg cursor-pointer">
+                    <svg class="w-4 h-4 mr-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+
+                <div class="carousel-item carousel-item-small hidden md:block" style="background-image: url('https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?q=80&w=300&auto=format&fit=crop');" onclick="window.location.href='archive.html'"></div>
+                <div class="carousel-item carousel-item-small hidden sm:block" style="background-image: url('https://images.unsplash.com/photo-1563089145-599997674d42?q=80&w=300&auto=format&fit=crop');" onclick="window.location.href='archive.html'"></div>
+
+                <div class="carousel-item-active-wrapper">
+                    <div class="carousel-item-active" style="background-image: url('https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?q=80&w=300&auto=format&fit=crop');" onclick="window.location.href='archive.html'"></div>
+                </div>
+
+                <div class="carousel-item carousel-item-small hidden sm:block" style="background-image: url('https://images.unsplash.com/photo-1576092768241-dec231879fc3?q=80&w=300&auto=format&fit=crop');" onclick="window.location.href='archive.html'"></div>
+                <div class="carousel-item carousel-item-small hidden md:block" style="background-image: url('https://images.unsplash.com/photo-1612438214708-f428a707dd4e?q=80&w=300&auto=format&fit=crop');" onclick="window.location.href='archive.html'"></div>
+
+                <button class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#bd455b] flex items-center justify-center text-white hover:bg-[#E63946] transition-colors shadow-lg cursor-pointer">
+                    <svg class="w-4 h-4 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-[#0A0A0C] to-transparent pointer-events-none"></div>
+    </div>
+
+    <!-- Original Features Section -->
+    <section class="py-32 bg-ink relative z-10">
+        <div class="max-w-7xl mx-auto px-6">
+            <h2 class="text-sm font-semibold text-center mb-20 tracking-[0.3em] text-gray-400 uppercase glow-title">The <span class="text-[#D4AF37] font-serif text-lg mx-2">哲学</span> Workflow</h2>
+            
+            <div class="cards-wrapper grid md:grid-cols-3 gap-6">
+                <div class="feature-card feature-card-master bg-sumi p-10 rounded-2xl border border-white/5 transition-all duration-500 group">
+                    <div class="card-spotlight"></div>
+                    <div class="card-kanji text-5xl text-[#E63946] font-serif mb-6">師匠</div>
+                    <h3 class="card-title text-lg font-medium mb-4 text-white tracking-wide">1. Master Record</h3>
+                    <p class="card-description text-gray-400 text-sm leading-loose font-light">Capture spatial coordinates of an expert's hands at 60FPS. The system maps intricate micro-movements into an array.</p>
+                </div>
+                <div class="feature-card feature-card-kintsugi bg-sumi p-10 rounded-2xl border border-white/5 transition-all duration-500 group">
+                    <div class="card-spotlight"></div>
+                    <div class="card-kanji text-5xl text-[#D4AF37] font-serif mb-6">分析</div>
+                    <h3 class="card-title text-lg font-medium mb-4 text-white tracking-wide">2. Kintsugi Ghosting</h3>
+                    <p class="card-description text-gray-400 text-sm leading-loose font-light">Data is rendered as an ethereal gold trail, creating a physical blueprint in digital space for the apprentice to follow.</p>
+                </div>
+                <div class="feature-card feature-card-neural bg-sumi p-10 rounded-2xl border border-white/5 transition-all duration-500 group">
+                    <div class="card-spotlight"></div>
+                    <div class="card-kanji text-5xl text-[#2A9D8F] font-serif mb-6">弟子</div>
+                    <h3 class="card-title text-lg font-medium mb-4 text-white tracking-wide">3. Neural Sync</h3>
+                    <p class="card-description text-gray-400 text-sm leading-loose font-light">Apprentices trace the path. AI calculates path deviation in real-time, providing a 0-100% synchronization score.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Full-Screen Mobile / Quick Menu Overlay -->
+    <div id="mobileMenu" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-xl hidden flex flex-col items-center justify-center p-6 select-none">
+        <button onclick="toggleMobileMenu()" class="absolute top-8 right-8 text-gray-400 hover:text-white font-mono text-3xl cursor-pointer z-50">&times;</button>
+        <div class="text-center flex flex-col items-center max-w-md w-full relative z-40">
+            <span class="text-torii font-serif text-4xl block mb-3 animate-pulse">伝承</span>
+            <h2 class="text-[11px] font-mono tracking-[0.4em] text-gold uppercase mb-12 opacity-80">Navigation Menu</h2>
+            
+            <ul class="space-y-6 text-xl tracking-[0.25em] uppercase font-light w-full" style="font-family: 'Space Grotesk', sans-serif;">
+                <li><a href="index.html" class="block py-2 text-gray-400 hover:text-white hover:scale-105 transition-all cursor-pointer">Home</a></li>
+                <li><a href="about.html" class="block py-2 text-gray-400 hover:text-white hover:scale-105 transition-all cursor-pointer">Tech & Vision</a></li>
+                <li><a href="archive.html" class="block py-2 text-gray-400 hover:text-white hover:scale-105 transition-all cursor-pointer">Archive</a></li>
+                <li><a href="dojo.html" class="block py-2 text-gray-400 hover:text-[#E63946] hover:scale-105 transition-all cursor-pointer">Enter Dojo</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="bg-black py-12 text-center border-t border-white/5">
+        <p class="text-gray-600 text-xs tracking-[0.2em] uppercase font-mono">© 2026 Project Denshō.</p>
+    </footer>
+
+    <script>
+        function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                window.location.href = `archive.html?search=${encodeURIComponent(query)}`;
+            } else {
+                window.location.href = 'archive.html';
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>

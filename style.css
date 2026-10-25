@@ -1,0 +1,264 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================================
+   Custom Theme Color Utilities & Font Definitions
+   ======================================================== */
+@layer utilities {
+    /* Text Color Utilities */
+    .text-torii { color: #E63946; }
+    .text-gold  { color: #D4AF37; }
+    .text-jade  { color: #2A9D8F; }
+
+    /* Background Color Utilities */
+    .bg-torii   { background-color: #E63946; }
+    .bg-gold    { background-color: #D4AF37; }
+    .bg-jade    { background-color: #2A9D8F; }
+    .bg-sumi    { background-color: #050505; }
+    .bg-ink     { background-color: rgba(10, 10, 12, 0.85); }
+
+    /* Border Color Utilities */
+    .border-torii { border-color: #E63946; }
+    .border-gold  { border-color: #D4AF37; }
+    .border-jade  { border-color: #2A9D8F; }
+}
+
+/* ========================================================
+   Global Base Typography & Custom Background Overlay
+   ======================================================== */
+body {
+    font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: #050505;
+    
+    /* AAPKI PHOTO BACKGROUND OVERLAY KE SATH */
+    background-image: 
+        linear-gradient(to bottom, rgba(5, 5, 5, 0.82), rgba(5, 5, 5, 0.88)),
+        url('download.jfif');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
+    color: #E5E7EB;
+    overflow-x: hidden;
+}
+
+code, pre, .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ========================================================
+   Dynamic Glowing & Animated Heading Shimmer Effects
+   ======================================================== */
+@keyframes textGlowShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes ambientGlowPulse {
+    0%, 100% { 
+        filter: drop-shadow(0 0 15px rgba(230, 57, 70, 0.4)) 
+                drop-shadow(0 0 30px rgba(212, 175, 55, 0.3)); 
+    }
+    50% { 
+        filter: drop-shadow(0 0 25px rgba(230, 57, 70, 0.7)) 
+                drop-shadow(0 0 50px rgba(42, 157, 143, 0.5)); 
+    }
+}
+
+.glow-title {
+    background: linear-gradient(120deg, #FFFFFF 0%, #E63946 25%, #D4AF37 50%, #2A9D8F 75%, #FFFFFF 100%);
+    background-size: 300% 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textGlowShimmer 5s ease infinite, ambientGlowPulse 4s ease-in-out infinite;
+    display: inline-block;
+}
+
+.heading-glow {
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(230, 57, 70, 0.6),
+                 0 0 25px rgba(212, 175, 55, 0.4);
+}
+
+.hero-line-glow {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #D4AF37, #E63946, transparent);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.6);
+}
+
+/* ========================================================
+   Smooth 3D Cyber Feature Cards & Perspective Wrapper
+   ======================================================== */
+.cards-wrapper {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.feature-card {
+    position: relative;
+    background: rgba(10, 10, 12, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transform-style: preserve-3d;
+    will-change: transform;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* Spotlight Radial Follower */
+.card-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.07), transparent 40%);
+    z-index: 2;
+}
+
+.feature-card:hover .card-spotlight {
+    opacity: 1;
+}
+
+/* Parallax Floating 3D Depth Elements */
+.feature-card .card-kanji {
+    transform: translateZ(32px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.feature-card h3, 
+.feature-card .card-title {
+    transform: translateZ(22px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.feature-card p, 
+.feature-card .card-description {
+    transform: translateZ(12px);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Card-Specific Neon Accent Hover Glows */
+.feature-card-master:hover {
+    border-color: rgba(230, 57, 70, 0.6);
+    box-shadow: 0 20px 40px rgba(230, 57, 70, 0.25),
+                inset 0 0 25px rgba(230, 57, 70, 0.15);
+}
+
+.feature-card-kintsugi:hover {
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25),
+                inset 0 0 25px rgba(212, 175, 55, 0.15);
+}
+
+.feature-card-neural:hover {
+    border-color: rgba(42, 157, 143, 0.6);
+    box-shadow: 0 20px 40px rgba(42, 157, 143, 0.25),
+                inset 0 0 25px rgba(42, 157, 143, 0.15);
+}
+
+/* ========================================================
+   Interactive Buttons & HUD Elements
+   ======================================================== */
+.btn-primary {
+    background: rgba(230, 57, 70, 0.15); 
+    border: 1px solid rgba(230, 57, 70, 0.4); 
+    color: #FFFFFF; 
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover { 
+    background: rgba(230, 57, 70, 0.9); 
+    box-shadow: 0 0 25px rgba(230, 57, 70, 0.5); 
+    transform: translateY(-2px);
+}
+
+.hud-btn {
+    position: relative;
+    padding: 0.5rem 1.5rem;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    border: 1px solid;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 10, 12, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.hud-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.hud-btn:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+    filter: grayscale(1);
+    box-shadow: none !important;
+}
+
+/* ========================================================
+   Radar Grid Overlay & Video Status Containers
+   ======================================================== */
+.grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+    pointer-events: none;
+    z-index: 5;
+}
+
+.grid-overlay::after {
+    content: '';
+    position: absolute;
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px; 
+    height: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+}
+
+/* Dynamic Spatial Sync Status Outline Highlights */
+#videoContainer { 
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; 
+}
+
+.status-recording { 
+    border-color: #E63946 !important; 
+    box-shadow: inset 0 0 40px rgba(230, 57, 70, 0.25), 0 0 20px rgba(230, 57, 70, 0.2); 
+}
+
+.status-match { 
+    border-color: #2A9D8F !important; 
+    box-shadow: inset 0 0 40px rgba(42, 157, 143, 0.25), 0 0 20px rgba(42, 157, 143, 0.2); 
+}
+
+.status-deviation { 
+    border-color: #E63946 !important; 
+    box-shadow: inset 0 0 40px rgba(230, 57, 70, 0.4), 0 0 20px rgba(230, 57, 70, 0.3); 
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); }
